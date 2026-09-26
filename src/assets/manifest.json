@@ -1,0 +1,1226 @@
+{
+ "generated": "2026-09-25T13:41:43.790Z",
+ "licenses": {
+  "human_base": "CC0 — MakeHuman base mesh/targets/rig (MPFB2) and eyes; textures and animations generated in Blender for this project",
+  "modules": "CC0 — authored procedurally in Blender for this project",
+  "materials": "CC0 — baked from procedural Blender materials for this project",
+  "hdri": "CC0 — physical sky rendered in Blender for this project",
+  "tools": "toktx (KTX-Software) Apache-2.0 and gltf-transform MIT are build tools only, not shipped"
+ },
+ "characters": {
+  "human_base": {
+   "path": "assets/characters/human_base.glb",
+   "lods": {
+    "lod1": "assets/characters/human_base_lod1.glb",
+    "lod2": "assets/characters/human_base_lod2.glb"
+   },
+   "bytes": 3254496,
+   "tris": 56744,
+   "verts": 35743,
+   "textures": [
+    "skin_normal",
+    "skin_light",
+    "brown_eye",
+    "kit_player"
+   ],
+   "animations": [
+    "idle",
+    "idle_upper",
+    "walk",
+    "walk_upper",
+    "jog",
+    "jog_upper",
+    "sprint",
+    "sprint_upper",
+    "strafe_left",
+    "strafe_right",
+    "aim",
+    "shoot",
+    "reload",
+    "hit",
+    "headshot",
+    "death",
+    "death_back"
+   ],
+   "joints": 208,
+   "skeleton": "mixamo",
+   "license": "human_base",
+   "skins": {
+    "tan": "assets/textures/skin_tan.ktx2",
+    "dark": "assets/textures/skin_dark.ktx2"
+   },
+   "kits": {
+    "kit_ale_gk": "assets/textures/kit_ale_gk.ktx2",
+    "kit_ale_outfield": "assets/textures/kit_ale_outfield.ktx2",
+    "kit_arg_gk": "assets/textures/kit_arg_gk.ktx2",
+    "kit_arg_outfield": "assets/textures/kit_arg_outfield.ktx2",
+    "kit_bra_gk": "assets/textures/kit_bra_gk.ktx2",
+    "kit_bra_outfield": "assets/textures/kit_bra_outfield.ktx2",
+    "kit_esp_gk": "assets/textures/kit_esp_gk.ktx2",
+    "kit_esp_outfield": "assets/textures/kit_esp_outfield.ktx2",
+    "kit_fra_gk": "assets/textures/kit_fra_gk.ktx2",
+    "kit_fra_outfield": "assets/textures/kit_fra_outfield.ktx2",
+    "kit_player": "assets/textures/kit_player.ktx2"
+   },
+   "meta": {
+    "skins": {
+     "light": "/home/claude/rdp/assets/src/character/skin_light.png",
+     "tan": "/home/claude/rdp/assets/src/character/skin_tan.png",
+     "dark": "/home/claude/rdp/assets/src/character/skin_dark.png"
+    },
+    "kits": {
+     "esp_outfield": "/home/claude/rdp/assets/src/character/kit_esp_outfield.png",
+     "esp_gk": "/home/claude/rdp/assets/src/character/kit_esp_gk.png",
+     "fra_outfield": "/home/claude/rdp/assets/src/character/kit_fra_outfield.png",
+     "fra_gk": "/home/claude/rdp/assets/src/character/kit_fra_gk.png",
+     "ale_outfield": "/home/claude/rdp/assets/src/character/kit_ale_outfield.png",
+     "ale_gk": "/home/claude/rdp/assets/src/character/kit_ale_gk.png",
+     "bra_outfield": "/home/claude/rdp/assets/src/character/kit_bra_outfield.png",
+     "bra_gk": "/home/claude/rdp/assets/src/character/kit_bra_gk.png",
+     "arg_outfield": "/home/claude/rdp/assets/src/character/kit_arg_outfield.png",
+     "arg_gk": "/home/claude/rdp/assets/src/character/kit_arg_gk.png"
+    },
+    "shirt_back_uv": [
+     418.5605163574219,
+     5.88031005859375,
+     446.4342956542969,
+     23.895538330078125
+    ],
+    "eye_center": [
+     0.0307772234082222,
+     -0.12453552335500717,
+     1.547152042388916
+    ]
+   }
+  },
+  "ual_mannequin": {
+   "path": "assets/characters/ual_mannequin.glb",
+   "lods": {},
+   "bytes": 559028,
+   "tris": 13744,
+   "joints": 65,
+   "skeleton": "mixamo-like",
+   "license": "CC0 (Quaternius Universal Animation Library)",
+   "skins": {},
+   "kits": {},
+   "animations": [
+    "idle",
+    "idle_upper",
+    "walk",
+    "walk_upper",
+    "jog",
+    "jog_upper",
+    "sprint",
+    "sprint_upper",
+    "strafe_left",
+    "strafe_right",
+    "back",
+    "crouch",
+    "crouch_walk",
+    "aim",
+    "aim_up",
+    "aim_down",
+    "pistol_idle",
+    "shoot",
+    "reload",
+    "throw",
+    "hit",
+    "hit_head",
+    "hit_l",
+    "hit_r",
+    "death",
+    "death_back",
+    "headshot",
+    "roll",
+    "dodge_left",
+    "dodge_right",
+    "celebrate",
+    "climb",
+    "climb_idle",
+    "jump",
+    "land",
+    "kick",
+    "tpose"
+   ],
+   "textures": [],
+   "meta": {
+    "source": "UAL1 Source",
+    "flatKit": true
+   }
+  },
+  "ubc_male": {
+   "path": "assets/characters/ubc_male.glb",
+   "lods": {},
+   "bytes": 1337412,
+   "tris": 14318,
+   "joints": 65,
+   "skeleton": "mixamo-like",
+   "license": "CC0 (Quaternius Universal Base Characters + UAL)",
+   "skins": {},
+   "kits": {},
+   "animations": [
+    "idle",
+    "idle_upper",
+    "walk",
+    "walk_upper",
+    "jog",
+    "jog_upper",
+    "sprint",
+    "sprint_upper",
+    "strafe_left",
+    "strafe_right",
+    "back",
+    "crouch",
+    "crouch_walk",
+    "aim",
+    "aim_up",
+    "aim_down",
+    "pistol_idle",
+    "shoot",
+    "reload",
+    "throw",
+    "hit",
+    "hit_head",
+    "hit_l",
+    "hit_r",
+    "death",
+    "death_back",
+    "headshot",
+    "roll",
+    "dodge_left",
+    "dodge_right",
+    "celebrate",
+    "climb",
+    "climb_idle",
+    "jump",
+    "land",
+    "kick",
+    "tpose"
+   ],
+   "textures": [
+    "T_Hair_1_Normal.png",
+    "T_Hair_1_BaseColor",
+    "T_Eye_Normal.png",
+    "T_Eye_Brown",
+    "T_Superhero_Male_Normal",
+    "T_Superhero_Male_Dark",
+    "T_Superhero_Male_Roughness"
+   ],
+   "meta": {
+    "source": "Superhero_Male_FullBody.gltf",
+    "kitShader": true
+   }
+  },
+  "ubc_female": {
+   "path": "assets/characters/ubc_female.glb",
+   "lods": {},
+   "bytes": 1314908,
+   "tris": 15060,
+   "joints": 65,
+   "skeleton": "mixamo-like",
+   "license": "CC0 (Quaternius Universal Base Characters + UAL)",
+   "skins": {},
+   "kits": {},
+   "animations": [
+    "idle",
+    "idle_upper",
+    "walk",
+    "walk_upper",
+    "jog",
+    "jog_upper",
+    "sprint",
+    "sprint_upper",
+    "strafe_left",
+    "strafe_right",
+    "back",
+    "crouch",
+    "crouch_walk",
+    "aim",
+    "aim_up",
+    "aim_down",
+    "pistol_idle",
+    "shoot",
+    "reload",
+    "throw",
+    "hit",
+    "hit_head",
+    "hit_l",
+    "hit_r",
+    "death",
+    "death_back",
+    "headshot",
+    "roll",
+    "dodge_left",
+    "dodge_right",
+    "celebrate",
+    "climb",
+    "climb_idle",
+    "jump",
+    "land",
+    "kick",
+    "tpose"
+   ],
+   "textures": [
+    "T_Hair_2_Normal",
+    "T_Hair_2_BaseColor",
+    "T_Eye_Normal.png",
+    "T_Eye_Brown",
+    "T_Superhero_Female_Normal",
+    "T_Superhero_Female_Dark_BaseColor",
+    "T_Superhero_Female_Roughness"
+   ],
+   "meta": {
+    "source": "Superhero_Female_FullBody.gltf",
+    "kitShader": true
+   }
+  }
+ },
+ "modules": {
+  "adboard": {
+   "path": "assets/modules/adboard.glb",
+   "bytes": 24524,
+   "tris": 324,
+   "materials": [
+    "ads",
+    "metal_dark"
+   ],
+   "license": "modules"
+  },
+  "barrels": {
+   "path": "assets/modules/barrels.glb",
+   "bytes": 44340,
+   "tris": 1164,
+   "materials": [
+    "barrel_a",
+    "metal_dark",
+    "barrel_b",
+    "barrel_c"
+   ],
+   "license": "modules"
+  },
+  "barrier": {
+   "path": "assets/modules/barrier.glb",
+   "bytes": 17676,
+   "tris": 176,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  },
+  "bigcrate": {
+   "path": "assets/modules/bigcrate.glb",
+   "bytes": 155836,
+   "tris": 1944,
+   "materials": [
+    "crate"
+   ],
+   "license": "modules"
+  },
+  "cabin": {
+   "path": "assets/modules/cabin.glb",
+   "bytes": 20680,
+   "tris": 216,
+   "materials": [
+    "cabin",
+    "metal_dark"
+   ],
+   "license": "modules"
+  },
+  "cart": {
+   "path": "assets/modules/cart.glb",
+   "bytes": 139132,
+   "tris": 1616,
+   "materials": [
+    "cart_white",
+    "glass",
+    "cross_red",
+    "rubber"
+   ],
+   "license": "modules"
+  },
+  "casa": {
+   "path": "assets/modules/casa.glb",
+   "bytes": 148260,
+   "tris": 1540,
+   "materials": [
+    "plaster",
+    "concrete",
+    "window_frame",
+    "door_wood",
+    "shutter",
+    "glass",
+    "metal_painted",
+    "metal_dark"
+   ],
+   "license": "modules"
+  },
+  "column": {
+   "path": "assets/modules/column.glb",
+   "bytes": 5340,
+   "tris": 44,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  },
+  "container": {
+   "path": "assets/modules/container.glb",
+   "bytes": 265060,
+   "tris": 3888,
+   "materials": [
+    "corrugated",
+    "metal_dark"
+   ],
+   "license": "modules"
+  },
+  "crate": {
+   "path": "assets/modules/crate.glb",
+   "bytes": 66220,
+   "tris": 756,
+   "materials": [
+    "crate"
+   ],
+   "license": "modules"
+  },
+  "cypress": {
+   "path": "assets/modules/cypress.glb",
+   "bytes": 6396,
+   "tris": 72,
+   "materials": [
+    "bark",
+    "leaf_dark"
+   ],
+   "license": "modules"
+  },
+  "dugout": {
+   "path": "assets/modules/dugout.glb",
+   "bytes": 116292,
+   "tris": 1620,
+   "materials": [
+    "glass",
+    "metal_dark",
+    "metal_painted",
+    "plastic"
+   ],
+   "license": "modules"
+  },
+  "flag": {
+   "path": "assets/modules/flag.glb",
+   "bytes": 11500,
+   "tris": 244,
+   "materials": [
+    "goal_white",
+    "flag_a",
+    "flag_b"
+   ],
+   "license": "modules"
+  },
+  "goal": {
+   "path": "assets/modules/goal.glb",
+   "bytes": 11664,
+   "tris": 216,
+   "materials": [
+    "goal_white"
+   ],
+   "license": "modules"
+  },
+  "goalnet": {
+   "path": "assets/modules/goalnet.glb",
+   "bytes": 1656,
+   "tris": 8,
+   "materials": [
+    "net"
+   ],
+   "license": "modules"
+  },
+  "house": {
+   "path": "assets/modules/house.glb",
+   "bytes": 410656,
+   "tris": 4532,
+   "materials": [
+    "concrete",
+    "metal_dark",
+    "corrugated",
+    "shopsign",
+    "glass",
+    "crate",
+    "metal_painted",
+    "lamp"
+   ],
+   "license": "modules"
+  },
+  "lamppost": {
+   "path": "assets/modules/lamppost.glb",
+   "bytes": 15160,
+   "tris": 368,
+   "materials": [
+    "metal_dark",
+    "lamp"
+   ],
+   "license": "modules"
+  },
+  "lm_ale": {
+   "path": "assets/modules/lm_ale.glb",
+   "bytes": 49512,
+   "tris": 692,
+   "materials": [
+    "lm_white",
+    "lm_steel",
+    "lm_red"
+   ],
+   "license": "modules"
+  },
+  "lm_arg": {
+   "path": "assets/modules/lm_arg.glb",
+   "bytes": 11948,
+   "tris": 144,
+   "materials": [
+    "lm_white",
+    "lm_dark"
+   ],
+   "license": "modules"
+  },
+  "lm_bra": {
+   "path": "assets/modules/lm_bra.glb",
+   "bytes": 31688,
+   "tris": 428,
+   "materials": [
+    "lm_rock",
+    "lm_white"
+   ],
+   "license": "modules"
+  },
+  "lm_esp": {
+   "path": "assets/modules/lm_esp.glb",
+   "bytes": 121036,
+   "tris": 1684,
+   "materials": [
+    "lm_stone",
+    "lm_dark",
+    "lm_white",
+    "lm_bronze"
+   ],
+   "license": "modules"
+  },
+  "lm_fra": {
+   "path": "assets/modules/lm_fra.glb",
+   "bytes": 28032,
+   "tris": 384,
+   "materials": [
+    "lm_bronze"
+   ],
+   "license": "modules"
+  },
+  "mast": {
+   "path": "assets/modules/mast.glb",
+   "bytes": 207512,
+   "tris": 2916,
+   "materials": [
+    "metal_painted",
+    "concrete",
+    "metal_dark",
+    "lamp"
+   ],
+   "license": "modules"
+  },
+  "palm": {
+   "path": "assets/modules/palm.glb",
+   "bytes": 30508,
+   "tris": 408,
+   "materials": [
+    "bark",
+    "leaf"
+   ],
+   "license": "modules"
+  },
+  "railing": {
+   "path": "assets/modules/railing.glb",
+   "bytes": 9884,
+   "tris": 180,
+   "materials": [
+    "metal_painted"
+   ],
+   "license": "modules"
+  },
+  "roof": {
+   "path": "assets/modules/roof.glb",
+   "bytes": 9400,
+   "tris": 88,
+   "materials": [
+    "metal_dark"
+   ],
+   "license": "modules"
+  },
+  "rubble": {
+   "path": "assets/modules/rubble.glb",
+   "bytes": 57012,
+   "tris": 648,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  },
+  "sandbags": {
+   "path": "assets/modules/sandbags.glb",
+   "bytes": 82892,
+   "tris": 2068,
+   "materials": [
+    "burlap"
+   ],
+   "license": "modules"
+  },
+  "seat": {
+   "path": "assets/modules/seat.glb",
+   "bytes": 12448,
+   "tris": 112,
+   "materials": [
+    "plastic",
+    "metal_painted"
+   ],
+   "license": "modules"
+  },
+  "shopcrate": {
+   "path": "assets/modules/shopcrate.glb",
+   "bytes": 71868,
+   "tris": 976,
+   "materials": [
+    "shop_green",
+    "brass",
+    "metal_dark",
+    "shopsign"
+   ],
+   "license": "modules"
+  },
+  "tier": {
+   "path": "assets/modules/tier.glb",
+   "bytes": 9424,
+   "tris": 88,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  },
+  "tower": {
+   "path": "assets/modules/tower.glb",
+   "bytes": 258560,
+   "tris": 2848,
+   "materials": [
+    "corrugated",
+    "concrete",
+    "metal_dark",
+    "metal_painted",
+    "lamp",
+    "ads",
+    "glass"
+   ],
+   "license": "modules"
+  },
+  "tree": {
+   "path": "assets/modules/tree.glb",
+   "bytes": 26224,
+   "tris": 252,
+   "materials": [
+    "bark",
+    "leaf"
+   ],
+   "license": "modules"
+  },
+  "tree_purple": {
+   "path": "assets/modules/tree_purple.glb",
+   "bytes": 26236,
+   "tris": 252,
+   "materials": [
+    "bark",
+    "leaf_purple"
+   ],
+   "license": "modules"
+  },
+  "walkway": {
+   "path": "assets/modules/walkway.glb",
+   "bytes": 5296,
+   "tris": 44,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  },
+  "wall": {
+   "path": "assets/modules/wall.glb",
+   "bytes": 9460,
+   "tris": 88,
+   "materials": [
+    "concrete"
+   ],
+   "license": "modules"
+  }
+ },
+ "weapons": {
+  "ar": {
+   "path": "assets/weapons/ar.glb",
+   "bytes": 252716,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "ar_choque": {
+   "path": "assets/weapons/ar_choque.glb",
+   "bytes": 270704,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "ar_lo": {
+   "path": "assets/weapons/ar_lo.glb",
+   "bytes": 83612,
+   "nodes": [
+    "body",
+    "tip",
+    "eject",
+    "grip_r"
+   ],
+   "license": "modules"
+  },
+  "ar_tac": {
+   "path": "assets/weapons/ar_tac.glb",
+   "bytes": 310180,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "gl": {
+   "path": "assets/weapons/gl.glb",
+   "bytes": 207420,
+   "nodes": [
+    "body",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "hands": {
+   "path": "assets/weapons/hands.glb",
+   "bytes": 390076,
+   "nodes": [
+    "hand_r",
+    "hand_l"
+   ],
+   "license": "modules"
+  },
+  "lmg": {
+   "path": "assets/weapons/lmg.glb",
+   "bytes": 234692,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "lmg_heavy": {
+   "path": "assets/weapons/lmg_heavy.glb",
+   "bytes": 129352,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "lmg_light": {
+   "path": "assets/weapons/lmg_light.glb",
+   "bytes": 84012,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "pistol": {
+   "path": "assets/weapons/pistol.glb",
+   "bytes": 123216,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r"
+   ],
+   "license": "modules"
+  },
+  "pistol_auto": {
+   "path": "assets/weapons/pistol_auto.glb",
+   "bytes": 83128,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r"
+   ],
+   "license": "modules"
+  },
+  "pistol_mag": {
+   "path": "assets/weapons/pistol_mag.glb",
+   "bytes": 105508,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r"
+   ],
+   "license": "modules"
+  },
+  "rpg": {
+   "path": "assets/weapons/rpg.glb",
+   "bytes": 104888,
+   "nodes": [
+    "body",
+    "mag",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "shotgun": {
+   "path": "assets/weapons/shotgun.glb",
+   "bytes": 132920,
+   "nodes": [
+    "body",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "shotgun_auto": {
+   "path": "assets/weapons/shotgun_auto.glb",
+   "bytes": 174544,
+   "nodes": [
+    "body",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "shotgun_db": {
+   "path": "assets/weapons/shotgun_db.glb",
+   "bytes": 96116,
+   "nodes": [
+    "body",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "smg": {
+   "path": "assets/weapons/smg.glb",
+   "bytes": 155220,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "smg_45": {
+   "path": "assets/weapons/smg_45.glb",
+   "bytes": 179668,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "smg_vespa": {
+   "path": "assets/weapons/smg_vespa.glb",
+   "bytes": 217604,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "sniper": {
+   "path": "assets/weapons/sniper.glb",
+   "bytes": 265976,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "sniper_50": {
+   "path": "assets/weapons/sniper_50.glb",
+   "bytes": 272884,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  },
+  "sniper_semi": {
+   "path": "assets/weapons/sniper_semi.glb",
+   "bytes": 216692,
+   "nodes": [
+    "body",
+    "mag",
+    "bolt",
+    "tip",
+    "eject",
+    "sight",
+    "grip_r",
+    "grip_l"
+   ],
+   "license": "modules"
+  }
+ },
+ "materials": {
+  "concrete": {
+   "license": "materials",
+   "color": "assets/materials/concrete_color.ktx2",
+   "colorBytes": 40035,
+   "normal": "assets/materials/concrete_normal.ktx2",
+   "normalBytes": 313555,
+   "rough": "assets/materials/concrete_rough.ktx2",
+   "roughBytes": 35038
+  },
+  "corrugated": {
+   "license": "materials",
+   "color": "assets/materials/corrugated_color.ktx2",
+   "colorBytes": 29996,
+   "normal": "assets/materials/corrugated_normal.ktx2",
+   "normalBytes": 27155,
+   "rough": "assets/materials/corrugated_rough.ktx2",
+   "roughBytes": 1059
+  },
+  "grass": {
+   "license": "materials",
+   "color": "assets/materials/grass_color.ktx2",
+   "colorBytes": 151516,
+   "normal": "assets/materials/grass_normal.ktx2",
+   "normalBytes": 1288717,
+   "rough": "assets/materials/grass_rough.ktx2",
+   "roughBytes": 124940
+  },
+  "metal_painted": {
+   "license": "materials",
+   "color": "assets/materials/metal_painted_color.ktx2",
+   "colorBytes": 41318,
+   "normal": "assets/materials/metal_painted_normal.ktx2",
+   "normalBytes": 241059,
+   "rough": "assets/materials/metal_painted_rough.ktx2",
+   "roughBytes": 37761
+  },
+  "plastic": {
+   "license": "materials",
+   "color": "assets/materials/plastic_color.ktx2",
+   "colorBytes": 48252,
+   "normal": "assets/materials/plastic_normal.ktx2",
+   "normalBytes": 226953,
+   "rough": "assets/materials/plastic_rough.ktx2",
+   "roughBytes": 1060
+  },
+  "rubber_track": {
+   "license": "materials",
+   "color": "assets/materials/rubber_track_color.ktx2",
+   "colorBytes": 35984,
+   "normal": "assets/materials/rubber_track_normal.ktx2",
+   "normalBytes": 317368,
+   "rough": "assets/materials/rubber_track_rough.ktx2",
+   "roughBytes": 1060
+  }
+ },
+ "hdri": {
+  "sky_day": {
+   "path": "assets/hdri/sky_day.hdr",
+   "bytes": 482301,
+   "license": "hdri"
+  },
+  "sky_dusk": {
+   "path": "assets/hdri/sky_dusk.hdr",
+   "bytes": 649931,
+   "license": "hdri"
+  },
+  "sky_golden": {
+   "path": "assets/hdri/sky_golden.hdr",
+   "bytes": 656574,
+   "license": "hdri"
+  },
+  "sky_night": {
+   "path": "assets/hdri/sky_night.hdr",
+   "bytes": 457932,
+   "license": "hdri"
+  },
+  "sky_overcast": {
+   "path": "assets/hdri/sky_overcast.hdr",
+   "bytes": 623737,
+   "license": "hdri"
+  }
+ },
+ "textures": {},
+ "sfx": {
+  "ar": {
+   "path": "assets/sfx/ar.wav",
+   "bytes": 51198,
+   "license": "modules"
+  },
+  "ar_b": {
+   "path": "assets/sfx/ar_b.wav",
+   "bytes": 51198,
+   "license": "modules"
+  },
+  "boom": {
+   "path": "assets/sfx/boom.wav",
+   "bytes": 141162,
+   "license": "modules"
+  },
+  "crack": {
+   "path": "assets/sfx/crack.wav",
+   "bytes": 6658,
+   "license": "modules"
+  },
+  "crowd": {
+   "path": "assets/sfx/crowd.wav",
+   "bytes": 158804,
+   "license": "modules"
+  },
+  "empty": {
+   "path": "assets/sfx/empty.wav",
+   "bytes": 2690,
+   "license": "modules"
+  },
+  "eshot_far": {
+   "path": "assets/sfx/eshot_far.wav",
+   "bytes": 52520,
+   "license": "modules"
+  },
+  "eshot_near": {
+   "path": "assets/sfx/eshot_near.wav",
+   "bytes": 51198,
+   "license": "modules"
+  },
+  "gl": {
+   "path": "assets/sfx/gl.wav",
+   "bytes": 11068,
+   "license": "modules"
+  },
+  "head": {
+   "path": "assets/sfx/head.wav",
+   "bytes": 15478,
+   "license": "modules"
+  },
+  "hitmark": {
+   "path": "assets/sfx/hitmark.wav",
+   "bytes": 2248,
+   "license": "modules"
+  },
+  "kill": {
+   "path": "assets/sfx/kill.wav",
+   "bytes": 11068,
+   "license": "modules"
+  },
+  "lmg": {
+   "path": "assets/sfx/lmg.wav",
+   "bytes": 51198,
+   "license": "modules"
+  },
+  "lmg_b": {
+   "path": "assets/sfx/lmg_b.wav",
+   "bytes": 51198,
+   "license": "modules"
+  },
+  "pick": {
+   "path": "assets/sfx/pick.wav",
+   "bytes": 10186,
+   "license": "modules"
+  },
+  "ping": {
+   "path": "assets/sfx/ping.wav",
+   "bytes": 15478,
+   "license": "modules"
+  },
+  "pistol": {
+   "path": "assets/sfx/pistol.wav",
+   "bytes": 44584,
+   "license": "modules"
+  },
+  "pistol_b": {
+   "path": "assets/sfx/pistol_b.wav",
+   "bytes": 44584,
+   "license": "modules"
+  },
+  "reload": {
+   "path": "assets/sfx/reload.wav",
+   "bytes": 34440,
+   "license": "modules"
+  },
+  "rpg": {
+   "path": "assets/sfx/rpg.wav",
+   "bytes": 79424,
+   "license": "modules"
+  },
+  "shotgun": {
+   "path": "assets/sfx/shotgun.wav",
+   "bytes": 53844,
+   "license": "modules"
+  },
+  "shotgun_b": {
+   "path": "assets/sfx/shotgun_b.wav",
+   "bytes": 53844,
+   "license": "modules"
+  },
+  "smg": {
+   "path": "assets/sfx/smg.wav",
+   "bytes": 44584,
+   "license": "modules"
+  },
+  "smg_b": {
+   "path": "assets/sfx/smg_b.wav",
+   "bytes": 44584,
+   "license": "modules"
+  },
+  "sniper": {
+   "path": "assets/sfx/sniper.wav",
+   "bytes": 66194,
+   "license": "modules"
+  },
+  "sniper_b": {
+   "path": "assets/sfx/sniper_b.wav",
+   "bytes": 66194,
+   "license": "modules"
+  },
+  "step_grass0": {
+   "path": "assets/sfx/step_grass0.wav",
+   "bytes": 4894,
+   "license": "modules"
+  },
+  "step_grass1": {
+   "path": "assets/sfx/step_grass1.wav",
+   "bytes": 4894,
+   "license": "modules"
+  },
+  "step_hard0": {
+   "path": "assets/sfx/step_hard0.wav",
+   "bytes": 3130,
+   "license": "modules"
+  },
+  "step_hard1": {
+   "path": "assets/sfx/step_hard1.wav",
+   "bytes": 3130,
+   "license": "modules"
+  },
+  "swap": {
+   "path": "assets/sfx/swap.wav",
+   "bytes": 3572,
+   "license": "modules"
+  },
+  "thud": {
+   "path": "assets/sfx/thud.wav",
+   "bytes": 6218,
+   "license": "modules"
+  },
+  "whistle": {
+   "path": "assets/sfx/whistle.wav",
+   "bytes": 22094,
+   "license": "modules"
+  },
+  "wood": {
+   "path": "assets/sfx/wood.wav",
+   "bytes": 5336,
+   "license": "modules"
+  }
+ }
+}

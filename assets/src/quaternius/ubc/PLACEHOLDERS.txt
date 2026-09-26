@@ -1,0 +1,5 @@
+Ficheiros substituídos por marcadores (voltar a enviar os originais do zip Universal Base Characters[Standard]):
+- T_Eye_Brown.png (olho desenhado)
+- T_Eye_Normal_png.png (normal plana)
+- T_Superhero_Male_Normal.png (normal plana)
+- T_Superhero_Male_Dark.png (cópia do tom claro T_Superhero_Male_Ligh.png)

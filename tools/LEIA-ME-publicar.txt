@@ -1,0 +1,23 @@
+REGRESSO DO PISTOLEIRO — publicar e instalar no iPhone (só com o telemóvel, grátis)
+
+Ficheiros deste pacote (têm de ficar juntos, na raiz do site):
+  index.html · sw.js · manifest.webmanifest · icon-192.png · icon-512.png
+
+OPÇÃO A — GitHub Pages (recomendado)
+1. Guarda os 5 ficheiros na app Ficheiros (Partilhar → Guardar em Ficheiros).
+2. No Safari, entra em github.com (cria conta se não tiveres) → "+" → New repository → nome: pistoleiro → Public → Create.
+3. No repositório: "Add file" → "Upload files" → "choose your files" → seleciona os 5 ficheiros na app Ficheiros → "Commit changes".
+   (O index.html tem ~25 MB; pelo browser o GitHub aceita até 25 MiB por ficheiro, por isso cabe, à justa.)
+4. Settings → Pages → em "Build and deployment", Source: "Deploy from a branch", Branch: main, pasta "/ (root)" → Save.
+5. Espera 1–2 minutos e abre no Safari: https://O-TEU-UTILIZADOR.github.io/pistoleiro/
+6. No Safari: botão Partilhar → "Adicionar ao ecrã principal" → Adicionar.
+7. Abre pelo ícone novo: ecrã inteiro, em paisagem. Depois da primeira abertura funciona sem rede.
+
+OPÇÃO B — Neocities (ainda mais simples, sem git)
+1. neocities.org → Sign up (grátis) → Dashboard → Upload → seleciona os 5 ficheiros.
+2. Abre https://O-TEU-NOME.neocities.org/ no Safari → Partilhar → "Adicionar ao ecrã principal".
+
+Atualizar o jogo mais tarde: envia sempre os DOIS ficheiros novos, index.html e sw.js, para o mesmo sítio (Add file → Upload files → Commit changes);
+na app instalada, fecha e volta a abrir duas vezes para apanhar a versão nova.
+
+Nota: o progresso guardado na versão aberta pela app Documents não passa para a app instalada (são sítios diferentes); na app começas do zero.

@@ -1,0 +1,10 @@
+[[14000,"JSON.stringify(window.__rdp?window.__rdp.dbg():'NO RDP')","/home/claude/wk/s1_menu.png"],
+ [500,"window.__rdp.start();'started'",null],
+ [5000,"JSON.stringify(window.__rdp.dbg())","/home/claude/wk/s2_play.png"],
+ [300,"window.__rdp.look(Math.PI/2,0);'look'",null],
+ [1500,"'ok'","/home/claude/wk/s3_look90.png"],
+ [300,"window.__rdp.look(Math.PI,0);'look'",null],
+ [1500,"'ok'","/home/claude/wk/s4_look180.png"],
+ [300,"window.__rdp.look(-Math.PI/2,0);'look'",null],
+ [1500,"'ok'","/home/claude/wk/s5_look270.png"],
+ [200,"(function(){var w=window.__rdp.world();var m={};w.forEach(function(e){var k=e.n.split(':')[0];m[k]=m[k]||{meshes:0,inst:0,tris:0,col:0,uv:0};m[k].meshes++;m[k].inst+=e.count;m[k].tris+=e.tris;if(e.hasCol)m[k].col++;if(e.uv)m[k].uv++;});return JSON.stringify(m);})()",null]]

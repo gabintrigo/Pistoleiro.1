@@ -1,0 +1,30 @@
+{
+ "skins": {
+  "light": "/home/claude/rdp/assets/src/character/skin_light.png",
+  "tan": "/home/claude/rdp/assets/src/character/skin_tan.png",
+  "dark": "/home/claude/rdp/assets/src/character/skin_dark.png"
+ },
+ "kits": {
+  "esp_outfield": "/home/claude/rdp/assets/src/character/kit_esp_outfield.png",
+  "esp_gk": "/home/claude/rdp/assets/src/character/kit_esp_gk.png",
+  "fra_outfield": "/home/claude/rdp/assets/src/character/kit_fra_outfield.png",
+  "fra_gk": "/home/claude/rdp/assets/src/character/kit_fra_gk.png",
+  "ale_outfield": "/home/claude/rdp/assets/src/character/kit_ale_outfield.png",
+  "ale_gk": "/home/claude/rdp/assets/src/character/kit_ale_gk.png",
+  "bra_outfield": "/home/claude/rdp/assets/src/character/kit_bra_outfield.png",
+  "bra_gk": "/home/claude/rdp/assets/src/character/kit_bra_gk.png",
+  "arg_outfield": "/home/claude/rdp/assets/src/character/kit_arg_outfield.png",
+  "arg_gk": "/home/claude/rdp/assets/src/character/kit_arg_gk.png"
+ },
+ "shirt_back_uv": [
+  418.5605163574219,
+  5.88031005859375,
+  446.4342956542969,
+  23.895538330078125
+ ],
+ "eye_center": [
+  0.0307772234082222,
+  -0.12453552335500717,
+  1.547152042388916
+ ]
+}
