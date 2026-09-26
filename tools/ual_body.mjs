@@ -11,7 +11,7 @@ const out=`public/assets/characters/${name}.glb`;
 await MeshoptEncoder.ready;
 const io=new NodeIO().registerExtensions([EXTMeshoptCompression]).registerDependencies({'meshopt.encoder':MeshoptEncoder});
 const doc=await io.read(bodyPath); const root=doc.getRoot();
-const ual=await new NodeIO().read('/mnt/user-data/uploads/UAL1.glb'); renameBones(ual);
+const ual=await new NodeIO().read((process.env.UAL1||'assets/src/quaternius/ual/UAL1.glb')); renameBones(ual);
 renameBones(doc);
 // materiais/malhas por classe
 for(const m of root.listMaterials()){ const nm=m.getName(); if(/hair/i.test(nm)) m.setName('hair'); else if(/eye/i.test(nm)) m.setName('eyes'); else m.setName('skin'); }
