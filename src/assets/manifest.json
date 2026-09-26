@@ -150,9 +150,11 @@
   },
   "ubc_male": {
    "path": "assets/characters/ubc_male.glb",
-   "lods": {},
-   "bytes": 1337412,
-   "tris": 14318,
+   "lods": {
+    "lod1": "assets/characters/ubc_male_lod1.glb"
+   },
+   "bytes": 1373696,
+   "tris": 17483,
    "joints": 65,
    "skeleton": "mixamo-like",
    "license": "CC0 (Quaternius Universal Base Characters + UAL)",
@@ -208,14 +210,21 @@
    ],
    "meta": {
     "source": "Superhero_Male_FullBody.gltf",
-    "kitShader": true
+    "kitShader": true,
+    "hairStyles": [
+     "Hair_Buzzed",
+     "Hair_SimpleParted",
+     "Hair_Beard"
+    ]
    }
   },
   "ubc_female": {
    "path": "assets/characters/ubc_female.glb",
-   "lods": {},
-   "bytes": 1314908,
-   "tris": 15060,
+   "lods": {
+    "lod1": "assets/characters/ubc_female_lod1.glb"
+   },
+   "bytes": 1397068,
+   "tris": 21250,
    "joints": 65,
    "skeleton": "mixamo-like",
    "license": "CC0 (Quaternius Universal Base Characters + UAL)",
@@ -271,7 +280,11 @@
    ],
    "meta": {
     "source": "Superhero_Female_FullBody.gltf",
-    "kitShader": true
+    "kitShader": true,
+    "hairStyles": [
+     "Hair_Long",
+     "Hair_Buns"
+    ]
    }
   }
  },

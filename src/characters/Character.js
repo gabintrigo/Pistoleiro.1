@@ -7,6 +7,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { fabricNormalTex } from '../world/Textures.js';
 const LOWER=['idle','walk','jog','sprint','strafe_left','strafe_right'], UPPER=['idle_upper','walk_upper','jog_upper','sprint_upper','aim'], ONESHOT=['shoot','reload','hit'], FULL=['headshot','death','death_back'];
 const _v=new THREE.Vector3(), _v2=new THREE.Vector3(), _q=new THREE.Quaternion(), _p=new THREE.Vector3();
+const _QY=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI); // frente da personagem = -Z
+const _UP=new THREE.Vector3(0,1,0);
 /** rifle held in the right hand: local transform computed from the baked aim pose (tools/rifle_calc.mjs) so the barrel runs grip -> foregrip */
 const RIFLE_QUAT=new THREE.Quaternion(0.4628,0.2191,-0.579,0.6345);
 let _rifleGeo=null, _rifleMat=null;
@@ -38,7 +40,7 @@ function rayCylinderY(o,d,cx,cz,r,y0,y1,maxT){ // exact ray vs vertical cylinder
 
 export class CharacterTemplate {
   constructor(asset, opts={}){
-    this.asset=asset; this.root=asset.gltf.scene; this.clips=new Map(asset.clips.map(c=>[c.name,c])); this.headScale=opts.headScale||1.3; this.flat=!!opts.flat; this.kitShader=!!opts.kitShader; this.gait=opts.gait||null;
+    this.asset=asset; this.name=opts.name||''; this.root=asset.gltf.scene; this.clips=new Map(asset.clips.map(c=>[c.name,c])); this.headScale=opts.headScale||1.3; this.flat=!!opts.flat; this.kitShader=!!opts.kitShader; this.gait=opts.gait||null;
     const meshes=[]; this.root.traverse(o=>{ if(o.isSkinnedMesh) meshes.push(o); }); this.meshes=meshes;
     this.lodMeshes={1:[],2:[]}; for(const [lvl,g] of [[1,asset.lod1],[2,asset.lod2]]) if(g) g.scene.traverse(o=>{ if(o.isSkinnedMesh) this.lodMeshes[lvl].push(o); });
     this.baseMaterials={}; for(const m of meshes){ const k=meshClass(m); if(!this.baseMaterials[k]) this.baseMaterials[k]=m.material; }
@@ -59,11 +61,14 @@ export class CharacterInstance {
     // body/hair/kit/eyes were separate objects in Blender and carry different bind data
     const lod0ByClass={}; for(const m of this.meshList) if(!lod0ByClass[m.userData.cls]) lod0ByClass[m.userData.cls]=m;
     for(const lvl of [1,2]) for(const src of template.lodMeshes[lvl]){ const cls=meshClass(src), ref=lod0ByClass[cls]||anyMesh; const sm=new THREE.SkinnedMesh(src.geometry, src.material); sm.name=src.name; sm.userData.cls=cls; sm.frustumCulled=false; sm.visible=false; sm.userData.lod=lvl; sm.position.copy(ref.position); sm.quaternion.copy(ref.quaternion); sm.scale.copy(ref.scale); ref.parent.add(sm); sm.bind(ref.skeleton, ref.bindMatrix); this.lods[lvl].push(sm); }
+    // penteados: o GLB traz todos os cortes (Hair_*) ligados ao mesmo esqueleto; só um fica visível de cada vez.
+    // Agrupados por nome ao longo dos LODs, para o corte escolhido continuar certo ao longe.
+    this.hairStyles={}; for(const lvl of [0,1,2]) for(const m of this.lods[lvl]) if(/^Hair_/.test(m.name)){ (this.hairStyles[m.name]=this.hairStyles[m.name]||[]).push(m); m.userData.hairOff=true; m.visible=false; }
     // per-instance materials
     this.mats={}; for(const name of ['Body','Hair','Kit','Eyes']){ const base=template.baseMaterials[name]; if(!base) continue; const m=base.clone(); m.emissive=new THREE.Color(0); m.emissiveIntensity=1; this.mats[name]=m; for(const lvl of [0,1,2]) for(const sm of this.lods[lvl]) if(sm.userData.cls===name) sm.material=m; }
     // less plastic: softer skin specular, cloth weave on the kit, matte hair
     if(template.kitShader&&this.mats.Body){ const m=this.mats.Body; m.vertexColors=true; m.userData.kit={uShirt:{value:new THREE.Color(0xd8202a)},uShorts:{value:new THREE.Color(0x1a2a5a)},uSocks:{value:new THREE.Color(0xf0f0f0)}};
-      m.onBeforeCompile=(sh)=>{ Object.assign(sh.uniforms,m.userData.kit); sh.fragmentShader=sh.fragmentShader.replace('#include <color_fragment>','#ifdef USE_COLOR_ALPHA\n vec3 kitCol=uShirt*vColor.r+uShorts*vColor.g+uSocks*vColor.b; float kitW=1.0-vColor.a; diffuseColor.rgb=mix(diffuseColor.rgb,kitCol,kitW);\n#endif').replace('void main() {','uniform vec3 uShirt; uniform vec3 uShorts; uniform vec3 uSocks;\nvoid main() {'); }; m.customProgramCacheKey=()=>'kitshader'; m.needsUpdate=true; }
+      m.onBeforeCompile=(sh)=>{ Object.assign(sh.uniforms,m.userData.kit); sh.fragmentShader=sh.fragmentShader.replace('#include <color_fragment>','#ifdef USE_COLOR_ALPHA\n vec4 kw=vColor; float kTop=max(max(kw.r,kw.g),max(kw.b,kw.a));\n kw=smoothstep(kTop-0.06,kTop,kw); kw/=max(kw.r+kw.g+kw.b+kw.a,1e-4);\n vec3 kitCol=uShirt*kw.r+uShorts*kw.g+uSocks*kw.b; float kitW=kw.r+kw.g+kw.b;\n diffuseColor.rgb=mix(diffuseColor.rgb,kitCol,kitW);\n#endif').replace('void main() {','uniform vec3 uShirt; uniform vec3 uShorts; uniform vec3 uSocks;\nvoid main() {'); }; m.customProgramCacheKey=()=>'kitshader'; m.needsUpdate=true; }
     if(this.mats.Body){ this.mats.Body.roughness=0.62; this.mats.Body.metalness=0; this.mats.Body.envMapIntensity=0.45; }
     if(this.mats.Kit){ this.mats.Kit.roughness=0.93; this.mats.Kit.metalness=0; try{ this.mats.Kit.normalMap=fabricNormalTex(); this.mats.Kit.normalScale=new THREE.Vector2(0.35,0.35); }catch(e){} this.mats.Kit.envMapIntensity=0.35; }
     if(this.mats.Hair){ this.mats.Hair.roughness=0.85; this.mats.Hair.envMapIntensity=0.3; }
@@ -79,7 +84,14 @@ export class CharacterInstance {
     else { const bm=new THREE.Mesh(rifleGeometry(),_rifleMat); bm.castShadow=true; bm.frustumCulled=false; this.rifle.add(bm); }
     this.flash=new THREE.Sprite(new THREE.SpriteMaterial({map:opts.flashTex, color:0xffd070, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true})); this.flash.scale.set(0.45,0.45,1); this.flash.visible=false; this.flash.position.copy(tipPos); tipHolder.add(this.flash);
     // number plane on the back (follows the upper spine)
-    if(opts.numberGeo && this.bones.Spine2){ const pl=new THREE.Mesh(opts.numberGeo, new THREE.MeshStandardMaterial({roughness:0.8})); this.numberPlane=pl; this.bones.Spine2.add(pl); this.root.updateWorldMatrix(true,true); const desired=_v.set(0,1.36,0.19); this.bones.Spine2.worldToLocal(desired); pl.position.copy(desired); this.bones.Spine2.getWorldQuaternion(_q); pl.quaternion.copy(_q.invert()); }
+    if(opts.numberGeo && this.bones.Spine2){ const pl=new THREE.Mesh(opts.numberGeo, new THREE.MeshStandardMaterial({roughness:0.8})); this.numberPlane=pl; this.bones.Spine2.add(pl); this.root.updateWorldMatrix(true,true);
+      // tamanho e recuo medidos no esqueleto (o corpo novo é maior que o antigo): o número acompanha
+      // a largura do tronco e assenta na superfície das costas em vez de flutuar atrás dela
+      const by=b=>this.bones[b]?this.bones[b].matrixWorld.elements[13]:0, bz=b=>this.bones[b]?this.bones[b].matrixWorld.elements[14]:0;
+      const torso=Math.max(0.2, by('Neck')-by('Spine'));
+      pl.scale.set(torso*0.62/0.5, torso*0.68/0.56, 1);
+      const desired=_v.set(0, by('Spine2')+torso*0.045, bz('Spine2')+torso*0.385);
+      this.bones.Spine2.worldToLocal(desired); pl.position.copy(desired); this.bones.Spine2.getWorldQuaternion(_q); pl.quaternion.copy(_q.invert()); }
     this.mixer=new THREE.AnimationMixer(this.root); this.actions={};
     for(const [name,clip] of template.clips){ const a=this.mixer.clipAction(clip); a.enabled=true; a.setEffectiveWeight(0); if(FULL.includes(name)||ONESHOT.includes(name)){ a.setLoop(THREE.LoopOnce,1); a.clampWhenFinished=true; } this.actions[name]=a; }
     this.lower=null; this.upper=null; this.full=null; this.oneshot=null; this.flashT=0; this.hitFlashT=0; this.lod=0; this.animSkip=0; this._head=new THREE.Vector3(); this._headOk=false;
@@ -103,23 +115,37 @@ export class CharacterInstance {
   setUpper(name, fade=0.18){ if(this.full) return; if(this.upper&&this.upper._clip.name===name) return; const prev=this.upper; this.upper=this._play(name,fade); if(this.oneshot) this.upper.setEffectiveWeight(0.15); if(prev&&prev!==this.upper) prev.fadeOut(fade); }
   /** role gear: helmet (shield bearers), tactical vest (boss), captain armband */
   setGear(g){ g=g||{}; if(!this.gear){ this.gear={};
+      // Os offsets do equipamento eram fixos em espaço do OSSO, calibrados para o rig antigo. No rig da
+      // Quaternius os ossos apontam noutra direcao (o colete ia parar a cara). Agora ancoram-se em pontos
+      // medidos no esqueleto em repouso, o que serve qualquer um dos corpos.
+      this.root.updateWorldMatrix(true,true);
+      const bw=n=>{ const b=this.bones[n]; const m=b&&b.matrixWorld.elements; return new THREE.Vector3(m?m[12]:0,m?m[13]:0,m?m[14]:0); };
+      const mid=(a,b,t)=>bw(a).lerp(bw(b),t);
+      /** prende obj ao osso na posicao mundo dada; eixo: null = alinhado com a personagem, ou osso-filho para seguir a direcao do membro */
+      const anchor=(obj,bone,pos,axisChild)=>{ const b=this.bones[bone]; if(!b) return false; b.add(obj);
+        const d=pos.clone(); b.worldToLocal(d); obj.position.copy(d);
+        b.getWorldQuaternion(_q); const inv=_q.clone().invert();
+        if(axisChild&&this.bones[axisChild]){ const dir=bw(axisChild).sub(bw(bone)).normalize();
+          obj.quaternion.copy(inv.multiply(new THREE.Quaternion().setFromUnitVectors(_UP,dir))); }
+        else obj.quaternion.copy(inv.multiply(_QY));
+        return true; };
       const hm=new THREE.MeshStandardMaterial({color:0x4a4f3a,roughness:0.7,metalness:0.1}),hk=new THREE.MeshStandardMaterial({color:0x1e2124,roughness:0.6,metalness:0.4});
-      const helmet=new THREE.Mesh(new THREE.SphereGeometry(0.135,16,10,0,Math.PI*2,0,Math.PI*0.52),hm); helmet.position.set(0,0.12,0.0); helmet.scale.set(1.06,1,1.12); this.gear.helmet=helmet; if(this.bones.Head) this.bones.Head.add(helmet);
+      const helmet=new THREE.Mesh(new THREE.SphereGeometry(0.135,16,10,0,Math.PI*2,0,Math.PI*0.52),hm); helmet.scale.set(1.06,1,1.12); this.gear.helmet=helmet; anchor(helmet,'Head',bw('Head').add(new THREE.Vector3(0,0.075,0)));
       for(const sx of [-1,1]){ const rl=new THREE.Mesh(new THREE.BoxGeometry(0.018,0.03,0.12),hk); rl.position.set(sx*0.14,-0.02,0.0); helmet.add(rl); } const nvg=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.04,0.025),hk); nvg.position.set(0,0.02,0.15); helmet.add(nvg); const cover=new THREE.Mesh(new THREE.TorusGeometry(0.137,0.008,6,24),hk); cover.rotation.x=Math.PI/2; cover.position.y=0.005; helmet.add(cover);
       const vm=new THREE.MeshStandardMaterial({color:0x3f4632,roughness:0.9,metalness:0.02}),vp=new THREE.MeshStandardMaterial({color:0x2e3326,roughness:0.85,metalness:0.02});
-      const vest=new THREE.Group(); vest.position.set(0,0.08,0.0); this.gear.vest=vest; if(this.bones.Spine2) this.bones.Spine2.add(vest);
+      const vest=new THREE.Group(); this.gear.vest=vest; anchor(vest,'Spine2',mid('Spine1','Spine2',0.75));
       const front=new THREE.Mesh(new THREE.BoxGeometry(0.34,0.3,0.055),vm); front.position.set(0,0,0.13); vest.add(front); const back=new THREE.Mesh(new THREE.BoxGeometry(0.34,0.32,0.05),vm); back.position.set(0,0.01,-0.12); vest.add(back);
       for(const sx of [-1,1]){ const side=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.2,0.24),vm); side.position.set(sx*0.17,-0.04,0.005); vest.add(side); const strap=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.03,0.26),vp); strap.position.set(sx*0.1,0.16,0.005); vest.add(strap); }
       for(let i=0;i<3;i++){ const pch=new THREE.Mesh(new THREE.BoxGeometry(0.075,0.1,0.045),vp); pch.position.set(-0.09+i*0.09,-0.07,0.175); vest.add(pch); } const radio=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.09,0.04),vp); radio.position.set(0.1,0.08,0.17); vest.add(radio);
-      const band=new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.07,0.06,10,1,true),new THREE.MeshStandardMaterial({color:0xffd000,roughness:0.6,side:THREE.DoubleSide})); band.position.set(0,0.12,0); this.gear.band=band; if(this.bones.LeftArm) this.bones.LeftArm.add(band);
+      const band=new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.07,0.06,10,1,true),new THREE.MeshStandardMaterial({color:0xffd000,roughness:0.6,side:THREE.DoubleSide})); this.gear.band=band; anchor(band,'LeftArm',mid('LeftArm','LeftForeArm',0.42),'LeftForeArm');
       // caneleiras-placa (defesas), grelha do capacete e ombreiras (guarda-redes blindado)
       const plate=new THREE.MeshStandardMaterial({color:0x8c939c,roughness:0.38,metalness:0.55}),dark=new THREE.MeshStandardMaterial({color:0x22262c,roughness:0.6,metalness:0.5});
       const shinGeo=new THREE.BoxGeometry(0.105,0.27,0.03);this.gear.shins=new THREE.Group();
-      for(const side of ['LeftLeg','RightLeg']){ const sh=new THREE.Mesh(shinGeo,plate); sh.position.set(0,0.2,0.058); const rim=new THREE.Mesh(new THREE.BoxGeometry(0.112,0.02,0.036),dark); rim.position.set(0,0.13,0); sh.add(rim); if(this.bones[side]){ this.bones[side].add(sh); (this.gear['shin_'+side]=sh); } }
+      for(const side of ['LeftLeg','RightLeg']){ const sh=new THREE.Mesh(shinGeo,plate); const rim=new THREE.Mesh(new THREE.BoxGeometry(0.112,0.02,0.036),dark); rim.position.set(0,0.13,0); sh.add(rim); const foot=side==='LeftLeg'?'LeftFoot':'RightFoot'; if(anchor(sh,side,mid(side,foot,0.42).add(new THREE.Vector3(0,0,-0.055)),foot)) this.gear['shin_'+side]=sh; }
       const cage=new THREE.Group(); for(const y of [-0.035,0.0,0.035]){ const bar=new THREE.Mesh(new THREE.BoxGeometry(0.16,0.009,0.009),dark); bar.position.set(0,y,0); cage.add(bar); } for(const x of [-0.05,0,0.05]){ const bar=new THREE.Mesh(new THREE.BoxGeometry(0.009,0.085,0.009),dark); bar.position.set(x,0,0.004); cage.add(bar); }
-      cage.position.set(0,0.07,0.14); this.gear.cage=cage; if(this.bones.Head) this.bones.Head.add(cage);
+      this.gear.cage=cage; anchor(cage,'Head',bw('Head').add(new THREE.Vector3(0,0.02,-0.13)));
       const padGeo=new THREE.SphereGeometry(0.1,12,8,0,Math.PI*2,0,Math.PI*0.5);
-      for(const side of ['LeftArm','RightArm']){ const pd=new THREE.Mesh(padGeo,plate); pd.position.set(0,0.035,0); pd.scale.set(1.15,0.7,1.1); if(this.bones[side]){ this.bones[side].add(pd); this.gear['pad_'+side]=pd; } }
+      for(const side of ['LeftArm','RightArm']){ const pd=new THREE.Mesh(padGeo,plate); pd.scale.set(1.15,0.7,1.1); const fore=side==='LeftArm'?'LeftForeArm':'RightForeArm'; if(anchor(pd,side,mid(side,fore,0.06),fore)) this.gear['pad_'+side]=pd; }
       for(const k in this.gear){ const o=this.gear[k]; o.traverse(m=>{ m.frustumCulled=false; if(m.isMesh) m.castShadow=true; }); } }
     this.gear.helmet.visible=!!g.helmet; this.gear.vest.visible=!!g.vest; this.gear.band.visible=!!g.band; this.gear.cage.visible=!!g.cage;
     for(const k of ['shin_LeftLeg','shin_RightLeg']) if(this.gear[k]) this.gear[k].visible=!!g.shins;
@@ -147,7 +173,9 @@ export class CharacterInstance {
   setGaitSpeed(v,dir=1){ if(!this.lower) return; const nat=(this.t.gait||GAIT_SPEED)[this.lower._clip.name]; if(!nat) return; const ts=Math.max(0.75,Math.min(1.3,v/nat))*(dir<0?-1:1); this.lower.setEffectiveTimeScale(ts); if(this.upper&&/_upper$/.test(this.upper._clip.name)) this.upper.setEffectiveTimeScale(ts); }
   fireUpper(name){ if(this.full) return; const a=this.actions[name]; if(!a) return; if(this.oneshot&&this.oneshot!==a){ this.oneshot.stop(); } if(this.upper){ this.upper.enabled=true; this.upper.setEffectiveWeight(0.15); } a.reset(); a.setLoop(THREE.LoopOnce,1); a.clampWhenFinished=true; a.setEffectiveWeight(1); a.fadeIn(0.05); a.play(); this.oneshot=a; }
   playFull(name, next=null){ for(const a of [this.lower,this.upper,this.oneshot]) if(a) a.fadeOut(0.1); this.lower=this.upper=this.oneshot=null; const a=this.actions[name]; if(!a) return; a.reset(); a.setLoop(THREE.LoopOnce,1); a.clampWhenFinished=true; a.setEffectiveWeight(1); a.fadeIn(0.08); a.play(); this.full=a; if(next){ const cb=e=>{ if(e.action===a){ this.mixer.removeEventListener('finished',cb); const n=this.actions[next]; if(n){ a.fadeOut(0.12); n.reset(); n.setLoop(THREE.LoopOnce,1); n.clampWhenFinished=true; n.setEffectiveWeight(1); n.fadeIn(0.12); n.play(); this.full=n; } } }; this.mixer.addEventListener('finished',cb); } }
-  setLod(l){ if(l===this.lod&&this._lodInit) return; this._lodInit=true; this.lod=l; for(const lvl of [0,1,2]) for(const sm of this.lods[lvl]) sm.visible=(lvl===l); }
+  setLod(l){ if(l===this.lod&&this._lodInit) return; this._lodInit=true; this.lod=l; for(const lvl of [0,1,2]) for(const sm of this.lods[lvl]) sm.visible=(lvl===l)&&!sm.userData.hairOff; }
+  /** corte de cabelo (nome da malha Hair_*) e barba, independentes; sem argumentos = careca */
+  setHair(style, beard){ for(const n in this.hairStyles){ const on=(n===style)||(!!beard&&n==='Hair_Beard'); for(const m of this.hairStyles[n]){ m.userData.hairOff=!on; m.visible=on&&(m.userData.lod===this.lod); } } }
   setShadows(on){ for(const lvl of [0,1]) for(const sm of this.lods[lvl]) sm.castShadow=on; }
   muzzle(on){ this.flash.visible=on; if(on){ this.flash.material.rotation=Math.random()*6.28; this.flashT=0.06; } }
   hitFlash(){ this.hitFlashT=0.08; for(const m of Object.values(this.mats)) m.emissive.setHex(0xff2020); }
@@ -182,8 +210,13 @@ export class CharacterInstance {
   }
 }
 export class CharacterPool {
-  constructor(template, scene, size, opts){ this.items=[]; for(let i=0;i<size;i++) this.items.push(new CharacterInstance(template,scene,opts)); }
-  acquire(){ const c=this.items.find(c=>!c.alive); return c||null; }
+  /** template pode ser um array: a pool fica com uma mistura de corpos (macho/fêmea) */
+  constructor(template, scene, size, opts){ const tps=Array.isArray(template)?template:[template]; this.items=[];
+    for(let i=0;i<size;i++){ const t=tps[i%tps.length]; const c=new CharacterInstance(t,scene,opts); c.assetName=t.name||''; this.items.push(c); } }
+  /** sem argumento devolve um livre à sorte (para os corpos variarem); com nome, prefere esse corpo */
+  acquire(prefer){ const free=this.items.filter(c=>!c.alive); if(!free.length) return null;
+    const pool=prefer?free.filter(c=>c.assetName===prefer):free; const from=pool.length?pool:free;
+    return from[(Math.random()*from.length)|0]; }
   update(dt,camPos,lodBias){ for(const c of this.items) c.update(dt,camPos,lodBias); }
   setShadows(on){ for(const c of this.items) c.setShadows(on); }
 }

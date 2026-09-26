@@ -79,3 +79,58 @@ O node não carrega GLTF (usa cápsulas): a personagem só se valida no WebKit.
 - Não usar emojis na UI; seguir os exemplos CoD Mobile/Combat Master; a personagem de menu só volta quando "aguentar a comparação".
 - Sniper: adversário deve acertar; a do jogador só com mira. Caçadeira útil a 5–12 m.
 - Testar tudo antes de publicar; ele fecha e reabre a app para apanhar a versão nova (cache `rdp-*`, sw-cleanup).
+
+## 9. Sessão de 27 set 2026 (máquina do Gabriel, macOS)
+
+Feito nesta sessão, tudo na árvore de trabalho e **por publicar**.
+
+**Fronteiras do equipamento (ponto 1 — resolvido).** Eram três causas, não uma: `ual_body.mjs` gravava pesos
+contínuos em `COLOR_0`; o shader somava as três cores (`uShirt*r+uShorts*g+uSocks*b`), fundindo vermelho com azul;
+e a cintura era decidida por *identidade de osso* (`Hips`/`Spine`), logo nunca podia ser uma linha reta. Agora:
+one-hot por vértice, `smoothstep` a endurecer os pesos no shader (banda de 0.06 = antialiasing), e cortes
+**geométricos** afináveis no topo do `ual_body.mjs`: `CUT={hem:+0.02, sleeve:0.55, shorts:0.62}`.
+
+**Penteados (ponto 2 — feito).** glTFs em `assets/src/quaternius/ubc/hair/` (840 KB, referências a texturas
+removidas de propósito: reaproveitam o material de cabelo do corpo, macho T_Hair_1 / fêmea T_Hair_2).
+`ual_body.mjs` funde-os e religa o skin ao esqueleto do corpo. Macho: `Hair_Buzzed`, `Hair_SimpleParted`,
+`Hair_Beard`. Fêmea: `Hair_Long`, `Hair_Buns`. Lista em `meta.hairStyles`; no jogo `CharacterInstance.setHair(corte, barba)`,
+escolhido em `dressEnemy` a partir dos cortes que **aquele** corpo tem. O careca fica em minoria.
+Só vieram 6 penteados + barba no pacote Standard (o handoff dizia 20) e não há corpos Regular/Teen.
+
+**ARMADILHA — nomes de osso repetidos.** Fundir um penteado traz a armadura completa de 65 ossos. Com nomes
+repetidos o GLTFLoader desambigua (`LeftArm` -> `LeftArm_1`), os canais de animação deixam de encontrar os ossos
+e **os braços ficam presos em T**. O `ual_body.mjs` descarta agora os 66 nós duplicados por penteado. Se algum dia
+os braços voltarem a ficar em T, confirmar primeiro: nós do GLB devem ser ~72 e **zero** nomes repetidos.
+
+**Número nas costas (ponto 3 — feito).** Estava 0,5×0,56 m a flutuar 0,19 m atrás da coluna. Agora o tamanho e o
+recuo saem do esqueleto (`torso=Neck.y-Spine.y`; largura `torso*0.62`, recuo `torso*0.385`). O emblema opcional não foi feito.
+
+**Variedade (ponto 4 — feito em parte).** `CharacterPool` aceita uma lista de templates: 16 instâncias com
+3 machos para cada fêmea; `acquire('ubc_male')` para o modelo do jogador. `TEAMS` passa a poder definir `skins` e
+`hairs` — o mecanismo está lá, **os valores por seleção não foram preenchidos** (é uma decisão tua, não minha).
+As texturas de pele *Light* existem agora em `ubc/` mas continuam por integrar: o tom ainda é um multiplicador em `setKit`.
+
+**Personagem do lobby (ponto 5 — feito, a precisar do teu veredicto).** Volta a aparecer, à direita da montra da
+arma: `MENU_CHAR={x:1.60,z:-2.90,yaw:Math.PI*0.82}` no `Game.js`, afinável em execução com `__rdp.menuChar(x,z,yaw)`.
+Faz `celebrate` de 11 a 18 em 18 segundos e regressa ao idle. Tu é que decides se "aguenta a comparação".
+
+**Equipamentos (ponto 6 — corrigido).** Os offsets do `setGear` estavam em espaço do OSSO, calibrados para o rig
+antigo; no rig da Quaternius os ossos apontam noutra direção e o colete ia parar à cara. As 7 peças ancoram agora
+em pontos medidos no esqueleto em repouso (`anchor()` em `Character.js`), com opção de seguir a direção do membro.
+
+**Desempenho (ponto 7 — feito).** `ual_body.mjs` gera `<nome>_lod1.glb` (simplify a 45%, sem animações nem
+texturas — o LOD usa o material da instância): macho 17 483 -> 8 739 triângulos (370 KB), fêmea 21 250 -> 10 174 (386 KB).
+`setHair` percorre os LODs todos, para o corte não trocar ao longe.
+
+**Capturas em macOS.** O `tools/wk/shot.py` precisa de xvfb (só Linux). Substituto: **`tools/wk/shot_mac.mjs`**,
+que fala CDP com um Chrome headless e lê os mesmos `steps.json`. Sem dependências novas.
+```
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9222 \
+  --user-data-dir=/tmp/rdp-chrome --enable-unsafe-swiftshader --use-gl=angle --use-angle=swiftshader about:blank &
+(cd dist && python3 -m http.server 8766 &)
+DPR=3 node tools/wk/shot_mac.mjs http://127.0.0.1:8766/ 812 375 steps.json     # DPR=3 -> 2436x1125
+```
+Notas de macOS: não há `timeout` (é `gtimeout`); o Node instalado é o v26 em `/usr/local/bin`.
+
+**Por fazer:** UAL2 (os 2 ficheiros continuam por enviar — não estão nas Descargas), sons, ícones Kenney, música,
+tons de pele por seleção, emblema. **Nada disto foi publicado**; é preciso uma chave nova.
