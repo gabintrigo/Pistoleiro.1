@@ -112,7 +112,9 @@ const flashGeo=new THREE.PlaneGeometry(0.5,0.5),flameGeo=new THREE.PlaneGeometry
 const FLASH_TEX=(()=>{try{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');if(!g||!g.createRadialGradient)return null;const gr=g.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,240,1)');gr.addColorStop(0.16,'rgba(255,225,130,0.95)');gr.addColorStop(0.45,'rgba(255,140,40,0.35)');gr.addColorStop(1,'rgba(255,80,0,0)');g.fillStyle=gr;g.fillRect(0,0,128,128);g.globalCompositeOperation='lighter';for(let i=0;i<7;i++){const a=i/7*Math.PI*2+Math.random()*0.3,L=38+Math.random()*24;g.fillStyle='rgba(255,205,110,0.5)';g.beginPath();g.moveTo(64+Math.cos(a-0.14)*9,64+Math.sin(a-0.14)*9);g.lineTo(64+Math.cos(a)*L,64+Math.sin(a)*L);g.lineTo(64+Math.cos(a+0.14)*9,64+Math.sin(a+0.14)*9);g.closePath();g.fill();}const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}catch(e){return null;}})();
 const flashMat=()=>new THREE.MeshBasicMaterial({color:FLASH_TEX?0xffffff:0xffd070,map:FLASH_TEX||null,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
 /* pose de cada arma à anca (mais perto, maior e em ângulo, como nos FPS de telemóvel) e distância da mira */
-const HIPW={ar:{x:0.14,y:-0.125,z:-0.3,yaw:0.26,roll:0.12},smg:{x:0.14,y:-0.12,z:-0.3,yaw:0.26,roll:0.12},shotgun:{x:0.14,y:-0.13,z:-0.33,yaw:0.24,roll:0.12},sniper:{x:0.15,y:-0.15,z:-0.32,yaw:0.22,roll:0.1},lmg:{x:0.16,y:-0.15,z:-0.34,yaw:0.24,roll:0.1},pistol:{x:0.11,y:-0.1,z:-0.3,yaw:0.22,roll:0.08},gl:{x:0.15,y:-0.13,z:-0.34,yaw:0.22,roll:0.1},rpg:{x:0.16,y:-0.12,z:-0.3,yaw:0.14,roll:0.06}};
+// Disparo de anca: a arma estava a 30 cm do olho e ocupava um terço do ecrã. Afastada (z) e descida (y),
+// passa a ler-se como arma encostada à anca e liberta o centro do ecrã. A mira (ADSP) é absoluta e não muda.
+const HIPW={ar:{x:0.18,y:-0.165,z:-0.54,yaw:0.26,roll:0.12},smg:{x:0.18,y:-0.158,z:-0.54,yaw:0.26,roll:0.12},shotgun:{x:0.18,y:-0.172,z:-0.59,yaw:0.24,roll:0.12},sniper:{x:0.19,y:-0.198,z:-0.58,yaw:0.22,roll:0.1},lmg:{x:0.21,y:-0.198,z:-0.61,yaw:0.24,roll:0.1},pistol:{x:0.14,y:-0.132,z:-0.45,yaw:0.22,roll:0.08},gl:{x:0.19,y:-0.172,z:-0.61,yaw:0.22,roll:0.1},rpg:{x:0.21,y:-0.158,z:-0.54,yaw:0.14,roll:0.06}};
 const ADSZ={ar:-0.2,smg:-0.35,shotgun:-0.25,sniper:-0.3,lmg:-0.33,pistol:-0.28,gl:-0.25,rpg:-0.2};
 const easeS=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
 const darkMat=M(0x1e1e22,0.7),brassMat=M(0xc9a227,0.35,0.7),grenMat=M(0x2e3a2c,0.6,0.3);
@@ -201,12 +203,14 @@ const GUNMATS={skin:null,sleeve:null,
   gun_rubber:GM2(0x18191b,0.92,0.0),gun_brass:GM2(0xd4a843,0.28,1.0),gun_red:GM2(0xb0241e,0.55,0.0),gun_olive:GM2(0x55603c,0.6,0.05),
   gun_glow:new THREE.MeshBasicMaterial({color:0xff2a2a}),glove:GM2(0x3d4046,0.86,0.02),armband:GM2(0xf2c94c,0.6,0.0)};
 const HANDPOS={ar:{r:[0.0,-0.10,0.19],l:[0.0,-0.04,-0.38]},smg:{r:[0.0,-0.09,0.15],l:[0.0,-0.09,-0.31]},shotgun:{r:[0.0,-0.09,0.19],l:[0.0,-0.06,-0.5]},sniper:{r:[0.0,-0.09,0.21],l:[0.0,-0.04,-0.5]},lmg:{r:[0.0,-0.10,0.21],l:[0.0,-0.09,-0.5]},pistol:{r:[0.0,-0.09,0.09],l:[-0.03,-0.10,0.05]},gl:{r:[0.0,-0.11,0.02],l:[0.0,-0.06,-0.45]},rpg:{r:[0.0,-0.09,0.06],l:[0.0,-0.08,-0.42]}};
-let handsAsset=null;
+let handsAsset=null,handsV1=null;
 function addHands(kind,g,model){
   const hp=HANDPOS[B(kind)]||HANDPOS.ar;
-  if(handsAsset){ const gr=model&&model.getObjectByName('grip_r'),gl=model&&model.getObjectByName('grip_l');
-    const hr=handsAsset.scene.getObjectByName('hand_r').clone(true);applyGunMaterials(hr);if(gr)hr.position.copy(gr.position);else hr.position.set(hp.r[0],hp.r[1],hp.r[2]);g.add(hr);
-    let hl=null;if(gl||!model){hl=handsAsset.scene.getObjectByName('hand_l').clone(true);applyGunMaterials(hl);if(gl)hl.position.copy(gl.position);else hl.position.set(hp.l[0],hp.l[1],hp.l[2]);g.add(hl);}
+  const HA=(B(kind)==='pistol'&&handsV1)?handsV1:handsAsset;
+  if(HA){ const gr=model&&model.getObjectByName('grip_r'),gl=model&&model.getObjectByName('grip_l');
+    const hr=HA.scene.getObjectByName('hand_r').clone(true);applyGunMaterials(hr);if(gr)hr.position.copy(gr.position);else hr.position.set(hp.r[0],hp.r[1],hp.r[2]);g.add(hr);
+    // pistola é de uma mão só: com as mãos novas (visíveis) a esquerda ficava a pairar ao lado da arma
+    let hl=null;if(gl||!model){hl=HA.scene.getObjectByName('hand_l').clone(true);applyGunMaterials(hl);if(gl)hl.position.copy(gl.position);else hl.position.set(hp.l[0],hp.l[1],hp.l[2]);g.add(hl);}
     return {hr,hl}; }
   for(const p of HANDS2){const m=new THREE.Mesh(boxGeo(p[1],p[2],p[3]),GM[p[7]]);m.position.set(p[4],p[5],p[6]);g.add(m);}
   return {};
@@ -248,6 +252,8 @@ function renderWeaponIcons(){
 async function loadWeaponModels(){
   if(typeof registry.weapon!=='function') return;
   try{ const h=await registry.weapon('hands'); handsAsset=(h&&h.scene&&h.scene.getObjectByName('hand_r'))?h:null; }catch(e){ handsAsset=null; }
+  // As mãos novas foram cozidas na pose de espingarda (duas mãos) e não assentam na pistola: aí fica a versão antiga.
+  try{ const h1=await registry.weapon('hands_v1'); handsV1=(h1&&h1.scene&&h1.scene.getObjectByName('hand_r'))?h1:null; }catch(e){ handsV1=null; }
   for(const k of ORDER){ try{ let a=null; if(k!==B(k)){ try{ a=await registry.weapon(k); }catch(e){ a=null; } } if(!a||!a.body) a=await registry.weapon(B(k)); if(!a||!a.body) continue; const old=views[k]; const nv=makeGunModelFromAsset(k,a); applyVariantTint(k,nv); nv.group.visible=old.group.visible; camera.remove(old.group); views[k]=nv; }catch(e){ console.warn('[weapons]',k,e); } }
 }
 function makeGunModel(kind){

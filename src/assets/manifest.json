@@ -978,6 +978,15 @@
     "grip_l"
    ],
    "license": "modules"
+  },
+  "hands_v1": {
+   "path": "assets/weapons/hands_v1.glb",
+   "bytes": 390076,
+   "nodes": [
+    "hand_r",
+    "hand_l"
+   ],
+   "license": "modules"
   }
  },
  "materials": {
